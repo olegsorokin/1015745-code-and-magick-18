@@ -6,6 +6,8 @@ var similarWizardTemplate = document.querySelector('#similar-wizard-template')
   .content
   .querySelector('.setup-similar-item');
 var WIZARDS_COUNT = 4;
+var COAT_COLOR_COUNT = 6;
+
 /**
  * Отображает панель с выбором магов
  * @param {HTMLDivElement} setupElement - элемент панели с выбором магов
@@ -16,13 +18,27 @@ var setup = function (setupElement) {
 };
 
 /**
- * Возвращает случайный порядковый номер элемента массива
- * @param {number} maxNumber - верхняя граница диапазона
- * @return {number} rand - случайный номер элемента массива
+ * Возвращает случайное целое число от 0 до max
+ * @param {number} max - верхняя граница диапазона
+ * @return {number} rand - случайное число из диапазона
  */
-var getRandomElementNumber = function (maxNumber) {
-  var rand = Math.floor(1 + Math.random() * (maxNumber - 1)) - 1;
+var getRandomNumber = function (max) {
+  var rand = Math.floor(1 + Math.random() * (max - 1)) - 1;
   return rand;
+};
+
+/**
+ * Создаёт и возвращает массив случайных RGB-цветов указанной длины
+ * @param {number} arrayLength - колличество элементов в массиве
+ * @return {object[]} colors - массив случайных RGB-цветов указанной длины
+ */
+var createRandomArrayColors = function (arrayLength) {
+  var colors = [];
+  for (var i = 0; i < arrayLength; i++) {
+    var color = 'rgb(' + getRandomNumber(255) + ', ' + getRandomNumber(255) + ', ' + getRandomNumber(255) + ')';
+    colors.push(color);
+  }
+  return colors;
 };
 
 /**
@@ -33,15 +49,15 @@ var getRandomElementNumber = function (maxNumber) {
 var createWizards = function (wizardsCount) {
   var WIZARD_FIRSTNAMES = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
   var WIZARD_LASTNAMES = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
-  var WIZARD_COATCOLORS = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
+  var WIZARD_COATCOLORS = createRandomArrayColors(COAT_COLOR_COUNT);
   var WIZARD_EYESCOLORS = ['black', 'red', 'blue', 'yellow', 'green'];
 
   var wizards = [];
-  while (wizards.length < wizardsCount) {
+  for (var i = 0; i < wizardsCount; i++) {
     var newWizard = {};
-    newWizard.name = WIZARD_FIRSTNAMES[getRandomElementNumber(WIZARD_FIRSTNAMES.length)] + ' ' + WIZARD_LASTNAMES[getRandomElementNumber(WIZARD_LASTNAMES.length)];
-    newWizard.eyes = WIZARD_EYESCOLORS[getRandomElementNumber(WIZARD_EYESCOLORS.length)];
-    newWizard.coatColor = WIZARD_COATCOLORS[getRandomElementNumber(WIZARD_COATCOLORS.length)];
+    newWizard.name = WIZARD_FIRSTNAMES[getRandomNumber(WIZARD_FIRSTNAMES.length)] + ' ' + WIZARD_LASTNAMES[getRandomNumber(WIZARD_LASTNAMES.length)];
+    newWizard.eyes = WIZARD_EYESCOLORS[getRandomNumber(WIZARD_EYESCOLORS.length)];
+    newWizard.coatColor = WIZARD_COATCOLORS[getRandomNumber(WIZARD_COATCOLORS.length)];
     wizards.push(newWizard);
   }
   return wizards;
@@ -52,7 +68,7 @@ var createWizards = function (wizardsCount) {
  * @param {object} wizard - элемент с заданным набором параметров
  * @return {HTMLDivElement} wizardElement - HTML-разметка для элемента с заданным набором параметров
  */
-var renderWizard = function (wizard) {
+var createWizard = function (wizard) {
   var wizardElement = similarWizardTemplate.cloneNode(true);
 
   wizardElement.querySelector('.setup-similar-label').textContent = wizard.name;
@@ -70,7 +86,7 @@ var renderWizard = function (wizard) {
 var createFragment = function (baseArray) {
   var baseFragment = document.createDocumentFragment();
   for (var i = 0; i < baseArray.length; i++) {
-    baseFragment.appendChild(renderWizard(baseArray[i]));
+    baseFragment.appendChild(createWizard(baseArray[i]));
   }
   return baseFragment;
 };
