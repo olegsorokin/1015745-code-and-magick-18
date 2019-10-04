@@ -4,14 +4,8 @@ var userDialog = document.querySelector('.setup');
 var userDialogOpen = document.querySelector('.setup-open');
 var userDialogClose = userDialog.querySelector('.setup-close');
 var userDialogInputName = userDialog.querySelector('.setup-user-name');
+var dialogHandler = userDialog.querySelector('.upload');
 
-var WIZARD_FIRSTNAMES = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
-var WIZARD_LASTNAMES = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
-var WIZARD_COAT_COLORS = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
-var WIZARD_EYES_COLORS = ['black', 'red', 'blue', 'yellow', 'green'];
-var WIZARD_FIREBALL_COLORS = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
-
-var wizardAppearance = document.querySelector('.setup-wizard-appearance');
 var wizardCoat = document.querySelector('.setup-wizard .wizard-coat');
 var wizardEyes = document.querySelector('.setup-wizard .wizard-eyes');
 var wizardFireBall = document.querySelector('.setup-fireball-wrap');
@@ -34,83 +28,47 @@ var onPopupEscPress = function (evt) {
 var openPopup = function () {
   userDialog.classList.remove('hidden');
   document.addEventListener('keydown', onPopupEscPress);
+  getPopupStartPosition();
 };
 
 var closePopup = function () {
   userDialog.classList.add('hidden');
   document.removeEventListener('keydown', onPopupEscPress);
+  resetPopupStartPosition();
 };
 
-var changeWizardCoatColor = function () {
-  var wizardCoatInput = wizardAppearance.querySelector('input[name=coat-color]');
 
-  do {
-    var wizardCoatNewColor = WIZARD_COAT_COLORS[getRandomNumber(WIZARD_COAT_COLORS.length)];
-  } while (wizardCoatNewColor === wizardCoatInput.value);
+var getPopupStartPosition = function () {
+  var currentX = userDialog.offsetLeft;
+  var currentY = userDialog.offsetTop;
 
-  wizardCoat.style.fill = wizardCoatNewColor;
-  wizardCoatInput.value = wizardCoatNewColor;
+  window.dialog = {
+    startPosition: {
+      x: currentX,
+      y: currentY
+    }
+  };
 };
 
-var changeWizardEyesColor = function () {
-  var wizardEyesInput = wizardAppearance.querySelector('input[name=eyes-color]');
-
-  do {
-    var wizardEyesNewColor = WIZARD_EYES_COLORS[getRandomNumber(WIZARD_EYES_COLORS.length)];
-  } while (wizardEyesNewColor === wizardEyesInput.value);
-
-  wizardEyes.style.fill = wizardEyesNewColor;
-  wizardEyesInput.value = wizardEyesNewColor;
+var resetPopupStartPosition = function () {
+  userDialog.style.left = window.dialog.startPosition.x + 'px';
+  userDialog.style.top = window.dialog.startPosition.y + 'px';
 };
 
-var changeWizardFireballColor = function () {
-  var wizardFireballValue = wizardFireBall.querySelector('input[name=fireball-color]');
-
-  do {
-    var wizardFireBallNewColor = WIZARD_FIREBALL_COLORS[getRandomNumber(WIZARD_FIREBALL_COLORS.length)];
-  } while (wizardFireBallNewColor === wizardFireballValue.value);
-
-  wizardFireBall.style.background = wizardFireBallNewColor;
-  wizardFireballValue.value = wizardFireBallNewColor;
-};
-
-/**
- * Отображает панель с выбором магов
- * @param {HTMLDivElement} setupElement - элемент панели с выбором магов
- */
 var setup = function (setupElement) {
   setupElement.querySelector('.setup-similar').classList.remove('hidden');
 };
 
-/**
- * Получает случайное целое число от 0 до max
- * @param {number} max - верхняя граница диапазона
- * @return {number} randomNumber - случайное число из диапазона
- */
-var getRandomNumber = function (max) {
-  var randomNumber = Math.floor(1 + Math.random() * (max - 1)) - 1;
-  return randomNumber;
-};
-
-var getRandomRGBColor = function () {
-  var randomColor = 'rgb(' + getRandomNumber(255) + ', ' + getRandomNumber(255) + ', ' + getRandomNumber(255) + ')';
-  return randomColor;
-};
-
 var createWizard = function () {
   var newWizard = {
-    name: WIZARD_FIRSTNAMES[getRandomNumber(WIZARD_FIRSTNAMES.length)] + ' ' + WIZARD_LASTNAMES[getRandomNumber(WIZARD_LASTNAMES.length)],
-    eyes: WIZARD_EYES_COLORS[getRandomNumber(WIZARD_EYES_COLORS.length)],
-    coatColor: getRandomRGBColor()
+    name: window.wizardElements.firstnames[window.getRandomValue.numberFromZeroToMax(window.wizardElements.firstnames.length)] + ' ' + window.wizardElements.lastnames[window.getRandomValue.numberFromZeroToMax(window.wizardElements.lastnames.length)],
+    eyes: window.wizardElements.eyesColors[window.getRandomValue.numberFromZeroToMax(window.wizardElements.eyesColors.length)],
+    coatColor: window.getRandomValue.rgbColor()
   };
+
   return newWizard;
 };
 
-/**
- * Создаёт и возвращает массив элементов(магов) указанной длины
- * @param {number} wizardsCount - кол-во элементов в массиве
- * @return {object[]} wizards - массив элементов (магов)
- */
 var createWizards = function (wizardsCount) {
   var wizards = [];
   for (var i = 0; i < wizardsCount; i++) {
@@ -119,11 +77,6 @@ var createWizards = function (wizardsCount) {
   return wizards;
 };
 
-/**
- * Создаёт и возвращает элемент с заданным набором параметров
- * @param {object} wizard - элемент с заданным набором параметров
- * @return {HTMLDivElement} wizardElement - HTML-разметка для элемента с заданным набором параметров
- */
 var createWizardHTML = function (wizard) {
   var wizardElement = similarWizardTemplate.cloneNode(true);
 
@@ -134,11 +87,6 @@ var createWizardHTML = function (wizard) {
   return wizardElement;
 };
 
-/**
- * Создаёт и возвращает DocumentFragment из массива элементов
- * @param {object[]} baseArray - исходный массив элементов
- * @return {HTMLDivElement} baseFragment - DocumentFragment на основе массива
- */
 var createFragment = function (baseArray) {
   var baseFragment = document.createDocumentFragment();
   for (var i = 0; i < baseArray.length; i++) {
@@ -155,6 +103,55 @@ userDialogOpen.addEventListener('keydown', function (evt) {
   if (evt.keyCode === ENTER_KEYCODE) {
     openPopup();
   }
+});
+
+dialogHandler.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+
+  var dragged = false;
+
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+    dragged = true;
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    userDialog.style.top = (userDialog.offsetTop - shift.y) + 'px';
+    userDialog.style.left = (userDialog.offsetLeft - shift.x) + 'px';
+
+  };
+
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+
+    if (dragged) {
+      var onClickPreventDefault = function (defaultEvt) {
+        defaultEvt.preventDefault();
+        dialogHandler.removeEventListener('click', onClickPreventDefault);
+      };
+      dialogHandler.addEventListener('click', onClickPreventDefault);
+    }
+
+  };
+
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
 });
 
 userDialogClose.addEventListener('click', function () {
@@ -174,15 +171,15 @@ userDialogInputName.addEventListener('keydown', function (evt) {
 });
 
 wizardCoat.addEventListener('click', function () {
-  changeWizardCoatColor();
+  window.colorizeWizardElement(wizardCoat);
 });
 
 wizardEyes.addEventListener('click', function () {
-  changeWizardEyesColor();
+  window.colorizeWizardElement(wizardEyes);
 });
 
 wizardFireBall.addEventListener('click', function () {
-  changeWizardFireballColor();
+  window.colorizeWizardElement(wizardFireBall);
 });
 
 setup(userDialog);
