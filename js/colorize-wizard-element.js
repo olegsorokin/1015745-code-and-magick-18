@@ -17,7 +17,7 @@
     var wizardElementColors = window.wizardElements[wizardElement + 'Colors'];
 
     do {
-      var wizardElementNewColor = wizardElementColors[window.getRandomValue.numberFromZeroToMax(wizardElementColors.length)];
+      var wizardElementNewColor = window.random.getArrayRandomElement(wizardElementColors);
     } while (wizardElementNewColor === wizardElementInput.value);
 
     if (element.tagName.toLowerCase() === 'div') {

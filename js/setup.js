@@ -4,7 +4,7 @@ var userDialog = document.querySelector('.setup');
 var userDialogOpen = document.querySelector('.setup-open');
 var userDialogClose = userDialog.querySelector('.setup-close');
 var userDialogInputName = userDialog.querySelector('.setup-user-name');
-var dialogHandler = userDialog.querySelector('.upload');
+var userDialogUpload = userDialog.querySelector('.upload');
 
 var wizardCoat = document.querySelector('.setup-wizard .wizard-coat');
 var wizardEyes = document.querySelector('.setup-wizard .wizard-eyes');
@@ -61,9 +61,9 @@ var setup = function (setupElement) {
 
 var createWizard = function () {
   var newWizard = {
-    name: window.wizardElements.firstnames[window.getRandomValue.numberFromZeroToMax(window.wizardElements.firstnames.length)] + ' ' + window.wizardElements.lastnames[window.getRandomValue.numberFromZeroToMax(window.wizardElements.lastnames.length)],
-    eyes: window.wizardElements.eyesColors[window.getRandomValue.numberFromZeroToMax(window.wizardElements.eyesColors.length)],
-    coatColor: window.getRandomValue.rgbColor()
+    name: window.random.getArrayRandomElement(window.wizardElements.firstnames) + ' ' + window.random.getArrayRandomElement(window.wizardElements.lastnames),
+    eyes: window.random.getArrayRandomElement(window.wizardElements.eyesColors),
+    coatColor: window.random.getRandomRGBColor()
   };
 
   return newWizard;
@@ -105,7 +105,7 @@ userDialogOpen.addEventListener('keydown', function (evt) {
   }
 });
 
-dialogHandler.addEventListener('mousedown', function (evt) {
+userDialogUpload.addEventListener('mousedown', function (evt) {
   evt.preventDefault();
 
   var startCoords = {
@@ -143,9 +143,9 @@ dialogHandler.addEventListener('mousedown', function (evt) {
     if (dragged) {
       var onClickPreventDefault = function (defaultEvt) {
         defaultEvt.preventDefault();
-        dialogHandler.removeEventListener('click', onClickPreventDefault);
+        userDialogUpload.removeEventListener('click', onClickPreventDefault);
       };
-      dialogHandler.addEventListener('click', onClickPreventDefault);
+      userDialogUpload.addEventListener('click', onClickPreventDefault);
     }
 
   };
