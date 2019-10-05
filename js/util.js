@@ -1,24 +1,21 @@
 'use strict';
 
 (function () {
-  var ESC_KEYCODE = 27;
-  var ENTER_KEYCODE = 13;
-
   window.util = {
     isEscEvent: function (evt, action) {
-      if (evt.keyCode === ESC_KEYCODE) {
+      if (evt.keyCode === window.keyCode.ESC) {
         action();
       }
     },
 
     isEnterEvent: function (evt, action) {
-      if (evt.keyCode === ENTER_KEYCODE) {
+      if (evt.keyCode === window.keyCode.ENTER) {
         action();
       }
     },
 
     isPropagationStopEvent: function (evt) {
-      if (evt.keyCode === ESC_KEYCODE) {
+      if (evt.keyCode === window.keyCode.ESC) {
         evt.stopPropagation();
       }
     },
