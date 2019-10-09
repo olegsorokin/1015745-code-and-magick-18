@@ -87,7 +87,7 @@
     });
 
     userDialogInputName.addEventListener('keydown', function (evt) {
-      if (evt.keyCode === window.keysCodes.ESC) {
+      if (evt.keyCode === window.params.keyCode.ESC) {
         evt.stopPropagation();
       }
     });

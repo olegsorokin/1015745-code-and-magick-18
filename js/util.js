@@ -3,19 +3,19 @@
 (function () {
   window.util = {
     isEscEvent: function (evt, action) {
-      if (evt.keyCode === window.keyCode.ESC) {
+      if (evt.keyCode === window.params.keyCode.ESC) {
         action();
       }
     },
 
     isEnterEvent: function (evt, action) {
-      if (evt.keyCode === window.keyCode.ENTER) {
+      if (evt.keyCode === window.params.keyCode.ENTER) {
         action();
       }
     },
 
     isPropagationStopEvent: function (evt) {
-      if (evt.keyCode === window.keyCode.ESC) {
+      if (evt.keyCode === window.params.keyCode.ESC) {
         evt.stopPropagation();
       }
     },

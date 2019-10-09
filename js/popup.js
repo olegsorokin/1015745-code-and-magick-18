@@ -5,7 +5,7 @@
   var userDialog = document.querySelector('.setup');
 
   var onPopupEscPress = function (evt) {
-    if (evt.keyCode === window.keyCodes.ESC) {
+    if (evt.keyCode === window.params.keyCode.ESC) {
       closePopup();
     }
   };
