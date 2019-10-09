@@ -6,12 +6,20 @@
     var userDialog = document.querySelector('.setup');
     var userDialogOpen = document.querySelector('.setup-open');
     var userDialogClose = userDialog.querySelector('.setup-close');
+    var userDialogForm = userDialog.querySelector('.setup-wizard-form');
     var userDialogInputName = userDialog.querySelector('.setup-user-name');
     var userDialogUpload = userDialog.querySelector('.upload');
 
     var wizardCoat = document.querySelector('.setup-wizard .wizard-coat');
     var wizardEyes = document.querySelector('.setup-wizard .wizard-eyes');
     var wizardFireBall = document.querySelector('.setup-fireball-wrap');
+
+    userDialog.addEventListener('submit', function (evt) {
+      window.backend.save(new FormData(userDialogForm), function () {
+        userDialog.classList.add('hidden');
+      }, window.util.errorHandler);
+      evt.preventDefault();
+    });
 
     userDialogOpen.addEventListener('click', window.popup.openPopup);
 
