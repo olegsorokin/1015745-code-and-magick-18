@@ -10,9 +10,16 @@
     var userDialogInputName = userDialog.querySelector('.setup-user-name');
     var userDialogUpload = userDialog.querySelector('.upload');
 
-    var wizardCoat = document.querySelector('.setup-wizard .wizard-coat');
-    var wizardEyes = document.querySelector('.setup-wizard .wizard-eyes');
-    var wizardFireBall = document.querySelector('.setup-fireball-wrap');
+    var wizard = document.querySelector('.setup-player');
+    var wizardCoat = wizard.querySelector('.wizard-coat');
+    var wizardEyes = wizard.querySelector('.wizard-eyes');
+    var wizardFireBall = wizard.querySelector('.setup-fireball-wrap');
+
+    var updateWizards = function () {
+      window.getCurrentElementsColors();
+      window.sortSimilarWizards(window.similarWizards);
+      window.renderSimilarWizards(window.sortedSimilarWizards);
+    };
 
     userDialog.addEventListener('submit', function (evt) {
       window.backend.save(new FormData(userDialogForm), function () {
@@ -24,9 +31,14 @@
     userDialogOpen.addEventListener('click', window.popup.openPopup);
 
     userDialogOpen.addEventListener('keydown', function (evt) {
-      if (evt.keyCode === window.keyCodes.ENTER) {
+      if (evt.keyCode === window.params.keyCodes.ENTER) {
         window.popup.openPopup();
       }
+    });
+
+    userDialogOpen.addEventListener('click', function () {
+      window.sortSimilarWizards(window.similarWizards);
+      window.renderSimilarWizards(window.sortedSimilarWizards);
     });
 
     userDialogUpload.addEventListener('mousedown', function (evt) {
@@ -92,12 +104,19 @@
       }
     });
 
+    window.addEventListener('load', function () {
+      window.backend.load(window.getSimilarWizards, window.util.errorHandler);
+      window.getCurrentElementsColors();
+    });
+
     wizardCoat.addEventListener('click', function () {
       window.colorizeWizardElement(wizardCoat);
+      window.debounce(updateWizards);
     });
 
     wizardEyes.addEventListener('click', function () {
       window.colorizeWizardElement(wizardEyes);
+      window.debounce(updateWizards);
     });
 
     wizardFireBall.addEventListener('click', function () {
