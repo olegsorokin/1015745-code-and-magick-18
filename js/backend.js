@@ -25,7 +25,7 @@
 
       xhr.timeout = 5000; // 5s
 
-      xhr.open('GET', 'https://js.dump.academy/code-and-magick/data');
+      xhr.open('GET', window.params.server.load);
       xhr.send();
     },
 
@@ -52,7 +52,7 @@
 
       xhr.timeout = 5000; // 5s
 
-      xhr.open('POST', 'https://js.dump.academy/code-and-magick');
+      xhr.open('POST', window.params.server.save);
       xhr.send(data);
     }
   };
